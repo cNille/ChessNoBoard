@@ -7,11 +7,11 @@ import android.view.Gravity
 import android.widget.RelativeLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
-import android.view.ViewGroup
-import java.security.AccessController.getContext
 
 
 class MainActivity : AppCompatActivity() {
+
+    interface spot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,27 +19,39 @@ class MainActivity : AppCompatActivity() {
 
         val boardSize = 8
         for (i in 1..64){
+            // Init a tempView for this spot
             var temp = TextView(this)
+            temp.gravity = Gravity.CENTER
             temp.id = i
 
-            if((i + ((i-1) / 8)) % 2 == 0){
-                temp.setBackgroundColor(Color.parseColor("#ffffff"))
-            } else {
-                temp.setBackgroundColor(Color.parseColor("#eeeeee"))
-            }
-
-            //temp.text = "${i}"
-
+            // Calc info of position
             val isTopRow = i < boardSize
             val isLeftColumn = (i-1) % boardSize == 0
+            val isDark = (i + ((i-1) / 8)) % 2 == 0
+
+            // Color the spot
+            var c: String
+            if(isDark){
+                c = "#ffffff"
+            } else {
+                c = "#eeeeee"
+            }
+            temp.setBackgroundColor(Color.parseColor(c))
+
+
+            // Set onclick listener to change colors.
+            temp.setOnClickListener { v ->
+                val color = if (isDark) "#66cc66" else "#44aa44"
+                v.setBackgroundColor(Color.parseColor(color)) }
 
             // Calculate dimensions of brick
             val scale = resources.getDisplayMetrics().density
             val size = (40 * scale + 0.5f).toInt()
-            var height = size
-            var width = size
-            val params = RelativeLayout.LayoutParams(width, height)
+            val params = RelativeLayout.LayoutParams(size, size)
 
+
+
+            // Set alignments
             if(isTopRow){
                 params.addRule(RelativeLayout.ALIGN_PARENT_TOP)
             } else {
@@ -51,10 +63,12 @@ class MainActivity : AppCompatActivity() {
                 params.addRule(RelativeLayout.RIGHT_OF, i - 1)
             }
             temp.layoutParams = params
-            temp.gravity = Gravity.CENTER
+
+            // Add spot to board
             board.addView(temp)
         }
     }
+
 
 
 
