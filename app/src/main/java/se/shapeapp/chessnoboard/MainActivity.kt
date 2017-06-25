@@ -3,7 +3,9 @@ package se.shapeapp.chessnoboard
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.view.Gravity
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -11,18 +13,24 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    interface spot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        var game = Game()
+        game.startBoard()
+        game.printBoard()
+
         val boardSize = 8
         for (i in 1..64){
             // Init a tempView for this spot
             var temp = TextView(this)
-            temp.gravity = Gravity.CENTER
             temp.id = i
+
+            temp.text = game.getText(i-1)
+            temp.gravity = Gravity.CENTER
 
             // Calc info of position
             val isTopRow = i < boardSize
