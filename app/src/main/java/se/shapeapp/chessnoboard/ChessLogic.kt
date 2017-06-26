@@ -7,6 +7,13 @@ import java.io.StringBufferInputStream
  */
 
 
+val greenDark = "#44aa44"
+val greenLight = "#66cc66"
+val blueDark = "#4444aa"
+val blueLight = "#6666cc"
+val grayDark = "#eeeeee"
+val grayLight = "#ffffff"
+
 class Game() {
 
     open var board: MutableList<MutableList<Piece>> = MutableList(8, { j ->
@@ -19,12 +26,29 @@ class Game() {
         return board[i/8][i%8].getString()
     }
 
-    fun startBoard(){
-        for(i in 0..7) {
-            for(j in 0..7) {
-                //board[i][j] = Knight(Pair(i,j), "WHITE")
-            }
+
+    var from: Int = -1
+    var to: Int = -1
+    fun  selectPiece(id: Int, isDark: Boolean): String {
+        if(from == id){
+            from = -1
+            to = -1
+            return if(isDark) grayDark else grayLight
+        } else if (from < 0){
+            from = id
+            return greenLight
+        } else if(to < 0){
+            to = id
+            return greenDark
+        } else {
+            from = id
+            to = -1
+            return greenLight
         }
+    }
+
+
+    fun startBoard(){
         board[0][0] = Tower(Pair(0,0), "WHITE")
         board[0][1] = Knight(Pair(0,1), "WHITE")
         board[0][2] = Runner(Pair(0,2), "WHITE")

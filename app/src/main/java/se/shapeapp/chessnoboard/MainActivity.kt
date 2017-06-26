@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
 
             // Set onclick listener to change colors.
             temp.setOnClickListener { v ->
-                val color = if (isDark) "#66cc66" else "#44aa44"
+
+                val color = game.selectPiece(v.id, isDark)
                 v.setBackgroundColor(Color.parseColor(color)) }
 
             // Calculate dimensions of brick
